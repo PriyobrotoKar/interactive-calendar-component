@@ -9,6 +9,7 @@ import { CalendarDays } from './calendar-days';
 import { CalendarWeekdays } from './calendar-weekdays';
 import { CalendarHeader } from './header';
 import { HeroImage } from './hero-image';
+import { CalendarNotes } from './notes';
 
 function Calendar() {
   const today = new Date();
@@ -37,6 +38,7 @@ function Calendar() {
         <div className="space-y-4">
           <CalendarWeekdays />
           <CalendarDays
+            today={today}
             startDate={startDate}
             endDate={endDate}
             setStartDate={setStartDate}
@@ -44,6 +46,8 @@ function Calendar() {
             firstDayOfMonth={firstDayOfMonth}
           />
         </div>
+
+        <CalendarNotes currentMonth={currentMonth} startDate={startDate} endDate={endDate} />
 
         {/*<div>
           <Button onClick={handlePrevMonth}>Prev</Button>

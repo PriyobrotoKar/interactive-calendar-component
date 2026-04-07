@@ -3,9 +3,10 @@ import { ComponentProps } from 'react';
 import { add, sub } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
-import { constructCalendarDates } from '@/lib/utils';
+import { cn, constructCalendarDates } from '@/lib/utils';
 
 interface CalendarDaysProps {
+  today: Date;
   firstDayOfMonth: Date;
   startDate: Date | null;
   endDate: Date | null;
@@ -14,6 +15,7 @@ interface CalendarDaysProps {
 }
 
 function CalendarDays({
+  today,
   firstDayOfMonth,
   startDate,
   endDate,
@@ -23,8 +25,7 @@ function CalendarDays({
   const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
   const weekdayOfFirstDay = firstDayOfMonth.getDay();
   const weekdayOfLastDay = sub(firstDayOfNextMonth, { days: 1 }).getDay();
-
-  console.log(startDate);
+  today.setHours(0, 0, 0, 0);
 
   const handleDayClick = (day: Date) => {
     if (!startDate) setStartDate(day);
@@ -42,7 +43,10 @@ function CalendarDays({
       } else {
         setEndDate(day);
       }
-    } else setEndDate(null);
+    } else {
+      if (endDate) setEndDate(null);
+      else setStartDate(null);
+    }
   };
 
   const isDayActive = (day: Date) => {
@@ -56,14 +60,23 @@ function CalendarDays({
     return day > startDate && day < endDate;
   };
 
+  const isToday = (day: Date) => day.toISOString() === today.toISOString();
+
   return (
     <div className="grid w-fit grid-cols-7 gap-y-1 text-center">
       {weekdayOfFirstDay > 0 &&
         constructCalendarDates(sub(firstDayOfMonth, { days: weekdayOfFirstDay })).map((day) => (
-          <CalendarDay key={day.toISOString()} day={day.getDate()} disabled />
+          <CalendarDay
+            isToday={isToday(day)}
+            data-range-middle={isDayInRange(day)}
+            key={day.toISOString()}
+            day={day.getDate()}
+            disabled
+          />
         ))}
       {constructCalendarDates(firstDayOfMonth).map((day) => (
         <CalendarDay
+          isToday={isToday(day)}
           data-active={isDayActive(day)}
           data-range-middle={isDayInRange(day)}
           data-range-start={day.toISOString() === startDate?.toISOString()}
@@ -77,7 +90,13 @@ function CalendarDays({
         firstDayOfNextMonth,
         add(firstDayOfNextMonth, { days: 7 - weekdayOfLastDay - 1 }),
       ).map((day) => (
-        <CalendarDay key={day.toISOString()} day={day.getDate()} disabled />
+        <CalendarDay
+          isToday={isToday(day)}
+          data-range-middle={isDayInRange(day)}
+          key={day.toISOString()}
+          day={day.getDate()}
+          disabled
+        />
       ))}
     </div>
   );
@@ -85,14 +104,18 @@ function CalendarDays({
 
 interface CalendarDayProps extends ComponentProps<'button'> {
   day: number;
+  isToday: boolean;
 }
 
-function CalendarDay({ day, disabled, ...props }: CalendarDayProps) {
+function CalendarDay({ day, isToday, disabled, ...props }: CalendarDayProps) {
   return (
     <div className="has-data-[active=true]:after:bg-muted relative z-0 has-data-[active=true]:after:absolute has-data-[active=true]:after:top-0 has-data-[active=true]:after:h-full has-data-[active=true]:after:w-1/2 has-data-[range-end=true]:after:left-0 has-data-[range-start=true]:after:right-0">
       <Button
         variant={'ghost'}
-        className="data-[range-middle=true]:bg-muted data-[range-middle=true]:text-muted-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground relative z-10 flex size-14 items-center justify-center border-0 font-mono text-lg data-[range-middle=true]:rounded-none"
+        className={cn(
+          'disabled:data-[range-middle=true]:text-muted-foreground/50 data-[range-middle=true]:bg-muted data-[range-middle=true]:text-muted-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground relative z-10 flex size-14 items-center justify-center border-0 font-mono text-lg data-[range-middle=true]:rounded-none disabled:data-[range-middle=true]:opacity-100',
+          isToday && 'bg-accent/20 text-accent',
+        )}
         {...props}
         disabled={disabled}
       >
