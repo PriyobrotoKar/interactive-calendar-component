@@ -3,7 +3,7 @@ interface CalendarHeaderProps {
 }
 
 function CalendarHeader({ firstDayOfMonth }: CalendarHeaderProps) {
-  const monthIndex = firstDayOfMonth.getMonth();
+  const monthIndex = firstDayOfMonth.getMonth() + 1;
 
   const [monthName, year] = firstDayOfMonth
     .toLocaleString('default', {

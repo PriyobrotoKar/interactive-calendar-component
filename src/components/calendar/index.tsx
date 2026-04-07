@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 
-import { format, parse } from 'date-fns';
+import { add, format, parse, sub } from 'date-fns';
 
+import { Button } from '../ui/button';
 import { CalendarDays } from './calendar-days';
 import { CalendarWeekdays } from './calendar-weekdays';
 import { CalendarHeader } from './header';
@@ -14,6 +15,16 @@ function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMMM yyyy'));
 
   const firstDayOfMonth = parse(currentMonth, 'MMMM yyyy', today);
+
+  const handlePrevMonth = () => {
+    const firstDayOfPrevMonth = sub(firstDayOfMonth, { months: 1 });
+    setCurrentMonth(format(firstDayOfPrevMonth, 'MMMM yyyy'));
+  };
+
+  const handleNextMonth = () => {
+    const firstDayOfNextMonth = add(firstDayOfMonth, { months: 1 });
+    setCurrentMonth(format(firstDayOfNextMonth, 'MMMM yyyy'));
+  };
 
   return (
     <div className="bg-card-background flex shadow-2xl">

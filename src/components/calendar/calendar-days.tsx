@@ -1,5 +1,7 @@
-import { constructCalendarDates } from '@/app/lib/utils';
 import { add, sub } from 'date-fns';
+
+import { Button } from '@/components/ui/button';
+import { constructCalendarDates } from '@/lib/utils';
 
 interface CalendarDaysProps {
   firstDayOfMonth: Date;
@@ -10,11 +12,14 @@ function CalendarDays({ firstDayOfMonth }: CalendarDaysProps) {
   const weekdayOfFirstDay = firstDayOfMonth.getDay();
   const weekdayOfLastDay = sub(firstDayOfNextMonth, { days: 1 }).getDay();
 
+  console.log(firstDayOfMonth, weekdayOfFirstDay, weekdayOfLastDay);
+
   return (
     <div className="grid grid-cols-7 gap-4 text-center">
-      {constructCalendarDates(sub(firstDayOfMonth, { days: weekdayOfFirstDay })).map((day) => (
-        <CalendarDay key={day} day={day} />
-      ))}
+      {weekdayOfFirstDay > 0 &&
+        constructCalendarDates(sub(firstDayOfMonth, { days: weekdayOfFirstDay })).map((day) => (
+          <CalendarDay key={day} day={day} disabled />
+        ))}
       {constructCalendarDates(firstDayOfMonth).map((day) => (
         <CalendarDay key={day} day={day} />
       ))}
@@ -22,7 +27,7 @@ function CalendarDays({ firstDayOfMonth }: CalendarDaysProps) {
         firstDayOfNextMonth,
         add(firstDayOfNextMonth, { days: 7 - weekdayOfLastDay - 1 }),
       ).map((day) => (
-        <CalendarDay key={day} day={day} />
+        <CalendarDay key={day} day={day} disabled />
       ))}
     </div>
   );
@@ -30,10 +35,19 @@ function CalendarDays({ firstDayOfMonth }: CalendarDaysProps) {
 
 interface CalendarDayProps {
   day: number;
+  disabled?: boolean;
 }
 
-function CalendarDay({ day }: CalendarDayProps) {
-  return <span className="flex size-10 items-center justify-center font-mono text-lg">{day}</span>;
+function CalendarDay({ day, disabled }: CalendarDayProps) {
+  return (
+    <Button
+      variant={'ghost'}
+      className="flex size-10 items-center justify-center font-mono text-lg"
+      disabled={disabled}
+    >
+      {day}
+    </Button>
+  );
 }
 
 export { CalendarDays };
