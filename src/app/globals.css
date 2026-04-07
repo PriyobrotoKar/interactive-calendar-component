@@ -1,26 +1,46 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: #f2f2f2;
+    --foreground: #171717;
+
+    --card-background: #ffffff;
+
+    --accent: #0c94fd;
+    --accent-foreground: #e2eefd;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+
+    --text-2xl: 2.5rem;
+    --text-2xl--font-weight: 600;
+    --text-2xl--line-height: 2.625rem;
+
+    --text-xl: 2rem;
+    --text-xl--font-weight: 400;
+    --text-xl--line-height: 2.625rem;
+
+    --text-lg: 1.25rem;
+    --text-lg--font-weight: 400;
+    --text-lg--line-height: 1.625rem;
+
+    --text-base: 1rem;
+    --text-base--font-weight: 400;
+    --text-base--line-height: 1.3125rem;
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-card-background: var(--card-background);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+    body {
+        @apply bg-background text-foreground text-base font-sans antialiased;
+    }
 }
