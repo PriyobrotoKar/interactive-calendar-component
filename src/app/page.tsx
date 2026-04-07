@@ -1,8 +1,8 @@
-import { Calendar } from "./components/calendar";
+import { Calendar } from './components/calendar';
 
 export default function Home() {
   return (
-    <div className="min-h-svh flex justify-center items-center">
+    <div className="flex min-h-svh items-center justify-center">
       <Calendar />
     </div>
   );
