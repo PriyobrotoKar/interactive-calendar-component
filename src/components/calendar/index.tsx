@@ -13,6 +13,8 @@ import { HeroImage } from './hero-image';
 function Calendar() {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMMM yyyy'));
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
   const firstDayOfMonth = parse(currentMonth, 'MMMM yyyy', today);
 
@@ -34,8 +36,19 @@ function Calendar() {
         <CalendarHeader firstDayOfMonth={firstDayOfMonth} />
         <div className="space-y-4">
           <CalendarWeekdays />
-          <CalendarDays firstDayOfMonth={firstDayOfMonth} />
+          <CalendarDays
+            startDate={startDate}
+            endDate={endDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            firstDayOfMonth={firstDayOfMonth}
+          />
         </div>
+
+        {/*<div>
+          <Button onClick={handlePrevMonth}>Prev</Button>
+          <Button onClick={handleNextMonth}>Next</Button>
+        </div>*/}
       </div>
     </div>
   );
