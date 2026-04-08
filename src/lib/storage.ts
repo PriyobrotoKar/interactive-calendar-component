@@ -53,8 +53,15 @@ export class Storage {
       const [start, end] = date.split('/');
       return `${this.formatDate(start)} - ${this.formatDate(end)}`;
     }
+
+    if (date.includes(' ')) {
+      return new Date(date).toLocaleDateString('en-IN', {
+        month: 'short',
+      });
+    }
+
     return new Date(date).toLocaleDateString('en-IN', {
-      day: '2-digit',
+      day: 'numeric',
       month: 'short',
     });
   }

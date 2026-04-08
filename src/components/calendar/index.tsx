@@ -60,10 +60,68 @@ function Calendar() {
 
         <CalendarNotes currentMonth={currentMonth} startDate={startDate} endDate={endDate} />
 
+        <CalendarNavigation
+          firstDayOfMonth={firstDayOfMonth}
+          goToPrevMonth={handlePrevMonth}
+          goToNextMonth={handleNextMonth}
+        />
         {/*<div>
           <Button onClick={handlePrevMonth}>Prev</Button>
           <Button onClick={handleNextMonth}>Next</Button>
         </div>*/}
+      </div>
+    </div>
+  );
+}
+
+interface CalendarNavigationProps {
+  firstDayOfMonth: Date;
+  goToPrevMonth: () => void;
+  goToNextMonth: () => void;
+}
+
+function CalendarNavigation({
+  firstDayOfMonth,
+  goToPrevMonth,
+  goToNextMonth,
+}: CalendarNavigationProps) {
+  const prevMonth = format(sub(firstDayOfMonth, { days: 1 }), 'MMM');
+  const nextMonth = format(add(firstDayOfMonth, { months: 1 }), 'MMM');
+
+  return (
+    <div className="absolute right-0 bottom-0 left-0 flex items-end justify-between">
+      <div
+        role="button"
+        onClick={goToPrevMonth}
+        className="bg-muted relative h-14 w-20 transition-all hover:h-16 hover:w-22.5"
+      >
+        <Image
+          src={'/page-peel.svg'}
+          alt="Page peel"
+          width={80}
+          height={60}
+          className="relative z-10 h-full w-full -scale-x-[1]"
+        />
+        <span className="text-muted-foreground absolute bottom-3 left-4 uppercase">
+          {prevMonth}
+        </span>
+      </div>
+
+      <div
+        role="button"
+        onClick={goToNextMonth}
+        className="bg-muted relative h-14 w-20 transition-all hover:h-16 hover:w-22.5"
+      >
+        <Image
+          src={'/page-peel.svg'}
+          alt="Page peel"
+          width={80}
+          height={60}
+          className="relative z-10 h-full w-full"
+        />
+        <span className="text-muted-foreground absolute right-4 bottom-3 uppercase">
+          {nextMonth}
+        </span>
       </div>
     </div>
   );
