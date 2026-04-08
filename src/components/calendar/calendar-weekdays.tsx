@@ -4,7 +4,7 @@ function CalendarWeekdays() {
   return (
     <div className="grid grid-cols-7 text-center">
       {weekdays.map((day) => (
-        <span key={day} className="text-muted-foreground w-14">
+        <span key={day} className="text-muted-foreground w-10 text-sm sm:w-12 sm:text-base lg:w-14">
           {day}
         </span>
       ))}

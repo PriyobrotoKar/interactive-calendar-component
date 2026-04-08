@@ -13,13 +13,13 @@ function CalendarHeader({ firstDayOfMonth }: CalendarHeaderProps) {
     .split(' ');
 
   return (
-    <div className="flex h-28 items-end justify-between">
-      <div className="bg-accent text-accent-foreground flex items-end self-stretch p-4 font-mono text-4xl">
+    <div className="flex h-20 items-end justify-between sm:h-28">
+      <div className="bg-accent text-accent-foreground flex items-end self-stretch p-4 font-mono text-xl sm:text-4xl">
         <span>{monthIndex.toString().padStart(2, '0')}</span>
       </div>
       <div className="flex flex-col text-right">
-        <span className="text-xl">{year}</span>
-        <h1 className="text-2xl uppercase">{monthName}</h1>
+        <span className="text-lg sm:text-xl">{year}</span>
+        <h1 className="text-xl-bold uppercase sm:text-2xl">{monthName}</h1>
       </div>
     </div>
   );

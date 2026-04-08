@@ -123,7 +123,7 @@ function CalendarDay({ day, isToday, isHoliday = false, disabled, ...props }: Ca
       <Button
         variant={'ghost'}
         className={cn(
-          'disabled:data-[range-middle=true]:text-muted-foreground/50 data-[range-middle=true]:bg-muted data-[range-middle=true]:text-muted-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground relative z-10 flex size-14 items-center justify-center border-0 font-mono text-lg data-[range-middle=true]:rounded-none disabled:data-[range-middle=true]:opacity-100',
+          'disabled:data-[range-middle=true]:text-muted-foreground/50 data-[range-middle=true]:bg-muted data-[range-middle=true]:text-muted-foreground data-[active=true]:bg-accent data-[active=true]:text-accent-foreground relative z-10 flex size-10 items-center justify-center border-0 font-mono text-sm data-[range-middle=true]:rounded-none disabled:data-[range-middle=true]:opacity-100 sm:size-12 sm:text-lg lg:size-14',
           isToday && 'bg-accent/20 text-accent',
           isHoliday && 'text-destructive',
         )}

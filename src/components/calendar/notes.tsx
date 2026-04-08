@@ -53,9 +53,9 @@ function CalendarNotes({ currentMonth, startDate, endDate }: CalendarNotesProps)
   }, [currentMonth, startDate, endDate]);
 
   return (
-    <div className="flex h-32 flex-col gap-2 pb-8">
+    <div className="flex h-24 flex-col gap-2 pb-4 sm:h-32 sm:pb-8">
       <div className="flex items-center justify-between">
-        <h2>Notes</h2>
+        <h2 className="text-sm sm:text-base">Notes</h2>
         <Button onClick={() => setShowInput(!showInput)} size={'xs'} variant={'secondary'}>
           <PlusIcon /> Add Note
         </Button>

@@ -49,6 +49,10 @@
   --text-2xl--font-weight: 700;
   --text-2xl--line-height: 2.625rem;
 
+  --text-xl-bold: 2rem;
+  --text-xl-bold--font-weight: 700;
+  --text-xl-bold--line-height: 2.625rem;
+
   --text-xl: 2rem;
   --text-xl--font-weight: 400;
   --text-xl--line-height: 2.625rem;

@@ -30,12 +30,12 @@ function Calendar() {
   };
 
   return (
-    <div className="bg-card-background flex shadow-2xl">
+    <div className="bg-card-background flex w-full max-w-2xl flex-col items-center shadow-2xl lg:w-fit lg:max-w-none lg:flex-row">
       <HeroImage />
 
-      <div className="space-y-8 px-20">
+      <div className="shrink-0 space-y-7 px-8 sm:px-20 lg:space-y-8">
         <CalendarHeader firstDayOfMonth={firstDayOfMonth} />
-        <div className="space-y-4">
+        <div className="space-y-2 sm:space-y-4">
           <CalendarWeekdays />
           <CalendarDays
             today={today}
