@@ -5,20 +5,27 @@ import { useState } from 'react';
 import { add, format, parse, sub } from 'date-fns';
 import Image from 'next/image';
 
-import { Button } from '../ui/button';
 import { CalendarDays } from './calendar-days';
 import { CalendarWeekdays } from './calendar-weekdays';
 import { CalendarHeader } from './header';
 import { HeroImage } from './hero-image';
 import { CalendarNotes } from './notes';
+import { CalendarMonthTheme, defaultMonthThemes } from './theme';
 
-function Calendar() {
+interface CalendarProps {
+  monthThemes?: CalendarMonthTheme[];
+}
+
+function Calendar({ monthThemes = defaultMonthThemes }: CalendarProps) {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMMM yyyy'));
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const firstDayOfMonth = parse(currentMonth, 'MMMM yyyy', today);
+  const currentTheme = monthThemes?.find((theme) => theme.month === firstDayOfMonth.getMonth());
+
+  if (!currentTheme) return null;
 
   const handlePrevMonth = () => {
     const firstDayOfPrevMonth = sub(firstDayOfMonth, { months: 1 });
@@ -31,7 +38,15 @@ function Calendar() {
   };
 
   return (
-    <div className="bg-card-background relative flex w-full max-w-2xl flex-col items-center shadow-2xl lg:w-fit lg:max-w-none lg:flex-row">
+    <div
+      style={
+        {
+          '--calendar-accent': currentTheme.accentBg,
+          '--calendar-accent-foreground': currentTheme.accentText,
+        } as React.CSSProperties
+      }
+      className="bg-card relative flex w-full max-w-2xl flex-col items-center rounded shadow-2xl lg:w-fit lg:max-w-none lg:flex-row"
+    >
       <div className="absolute -top-1 left-1/2 -translate-x-1/2">
         <Image
           src={'/binding.svg'}
@@ -42,7 +57,7 @@ function Calendar() {
         />
       </div>
 
-      <HeroImage />
+      <HeroImage theme={currentTheme} />
 
       <div className="shrink-0 space-y-7 px-6 sm:px-20 lg:space-y-8">
         <CalendarHeader firstDayOfMonth={firstDayOfMonth} />
@@ -93,7 +108,7 @@ function CalendarNavigation({
       <div
         role="button"
         onClick={goToPrevMonth}
-        className="bg-muted relative h-14 w-20 transition-all hover:h-16 hover:w-22.5"
+        className="bg-muted relative h-12 w-17 overflow-hidden rounded-tr rounded-bl transition-all hover:h-16 hover:w-22.5 active:h-17 active:w-24 sm:h-14 sm:w-20"
       >
         <Image
           src={'/page-peel.svg'}
@@ -110,7 +125,7 @@ function CalendarNavigation({
       <div
         role="button"
         onClick={goToNextMonth}
-        className="bg-muted relative h-14 w-20 transition-all hover:h-16 hover:w-22.5"
+        className="bg-muted relative h-12 w-17 overflow-hidden rounded-tl rounded-br transition-all hover:h-16 hover:w-22.5 active:h-17 active:w-24 sm:h-14 sm:w-20"
       >
         <Image
           src={'/page-peel.svg'}

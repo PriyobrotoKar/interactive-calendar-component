@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { format } from 'date-fns';
 import { PlusIcon } from 'lucide-react';
-import Image from 'next/image';
 
 import { Storage } from '@/lib/storage';
 
@@ -34,25 +33,40 @@ interface CalendarNotesProps {
 
 function CalendarNotes({ currentMonth, startDate, endDate }: CalendarNotesProps) {
   const [showInput, setShowInput] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [note, setNote] = useState('');
   const [notes, setNotes] = useState<Note[]>(
     Storage.getNotesByDate(inferNoteDate(startDate, endDate, currentMonth)),
   );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    console.log(e.key);
     if (e.key === 'Enter') {
-      const noteDate = inferNoteDate(startDate, endDate, currentMonth);
+      if (!note) {
+        setShowInput(false);
+        return;
+      }
 
+      const noteDate = inferNoteDate(startDate, endDate, currentMonth);
       const newNote = Storage.saveNote({ text: note, date: noteDate });
       setNotes([...notes, newNote]);
       setNote('');
       setShowInput(false);
+      return;
     }
   };
 
   useEffect(() => {
     setNotes(Storage.getNotesByDate(inferNoteDate(startDate, endDate, currentMonth)));
   }, [currentMonth, startDate, endDate]);
+
+  useEffect(() => {
+    if (showInput && inputRef.current) {
+      inputRef.current.focus();
+    } else {
+      setNote('');
+    }
+  }, [showInput]);
 
   return (
     <div className="relative flex h-24 flex-col gap-2 pb-4 sm:h-32 sm:pb-8">
@@ -74,9 +88,11 @@ function CalendarNotes({ currentMonth, startDate, endDate }: CalendarNotesProps)
       <div className="overflow-x-auto">
         {showInput && (
           <Input
-            className="rounded-none border-0 border-b focus-visible:ring-0"
+            ref={inputRef}
+            className="h-6 rounded-none border-0 border-b px-2 focus-visible:ring-0"
             placeholder="Enter a note..."
             onKeyDown={handleKeyDown}
+            onBlur={() => !note && setShowInput(false)}
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />
@@ -87,16 +103,16 @@ function CalendarNotes({ currentMonth, startDate, endDate }: CalendarNotesProps)
             <span className="inline-flex items-center gap-1 pr-2 pl-1.5 align-text-bottom text-xs font-medium">
               <PlusIcon className="size-3" /> Add Note
             </span>
-            to add a new note for this month, a specific date or range of dates.
+            to add a new note for this month, a date or range of dates.
           </p>
         )}
         <ul>
           {notes.map((note, i) => (
             <li
               key={i}
-              className="flex h-6 items-center justify-between border-b px-2 py-1 text-sm"
+              className="flex min-h-6 items-end justify-between border-b px-2 py-1 text-sm"
             >
-              <span>{note.text}</span>
+              <span className="max-w-80">{note.text}</span>
               <span className="text-muted-foreground uppercase">{note.date}</span>
             </li>
           ))}

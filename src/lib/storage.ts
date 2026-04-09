@@ -12,7 +12,9 @@ export class Storage {
     };
 
     const newNotes = [...notes, noteData];
-    localStorage.setItem(this.KEY, JSON.stringify(newNotes));
+    if (this.canUseStorage()) {
+      localStorage.setItem(this.KEY, JSON.stringify(newNotes));
+    }
 
     return {
       ...noteData,
@@ -71,7 +73,19 @@ export class Storage {
   }
 
   private static getAllNotes(): Note[] {
-    return JSON.parse(localStorage.getItem(this.KEY) ?? '[]');
+    if (!this.canUseStorage()) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(localStorage.getItem(this.KEY) ?? '[]');
+    } catch {
+      return [];
+    }
+  }
+
+  private static canUseStorage(): boolean {
+    return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
   }
 
   private static filterBySingleDate(date: string, notes: Note[]): Note[] {
